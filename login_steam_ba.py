@@ -1,12 +1,6 @@
 import requests
 from decimal import Decimal
-from  db import insert_User, insert_Game, insert_Relationship, insert_Relationship_Detail,update_Relationship_Detail,check_insert_Relationship,insert_table_map,update_table_map,check_insert_map, get_User, keep_alive
-from bs4 import BeautifulSoup
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-import time
-import threading
-from selenium.common.exceptions import NoSuchElementException
+from db import insert_User, insert_Game, insert_Relationship, insert_Relationship_Detail, get_Game, get_User, keep_alive
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -21,18 +15,18 @@ from selenium.webdriver.support import expected_conditions as EC
 import mysql.connector
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
-increment_id = 0
+
+# driver = webdriver.Chrome()
 chrome_options = Options()
 chrome_options.add_argument("--headless")  # Chạy ở chế độ headless
-chrome_options.add_argument("--no-sandbox")  
-chrome_options.add_argument("--disable-dev-shm-usage")  
-chrome_options.add_argument("--disable-gpu")  
-chrome_options.add_argument("--window-size=1920,1080")  
-chrome_options.add_argument("--disable-software-rasterizer") 
+chrome_options.add_argument("--no-sandbox")  # Bỏ qua mô hình bảo mật OS
+chrome_options.add_argument("--disable-dev-shm-usage")  # Vượt qua vấn đề tài nguyên hạn chế
 increment_id = 0
 driver = webdriver.Chrome(service=Service(), options=chrome_options)
-# driver = webdriver.Chrome()
+# Khởi tạo trình duyệt Chrome
+# driver_service = Service('/path/to/chromedriver')  # Thay đổi đường dẫn đến ChromeDriver
 
+# driver = webdriver.Chrome()
 
 
 
@@ -78,7 +72,10 @@ def Get_All_User():
 
  
 def get_owned_games_count_by_id_steam(steam_id):
+
+
     url = f"https://steamcommunity.com/id/{steam_id}"
+    
     driver.get(url)
     time.sleep(5)  # Chờ trang tải hoàn tất
 
@@ -95,9 +92,14 @@ def get_owned_games_count_by_id_steam(steam_id):
         return 0
     
 def get_owned_games_count_by_id_profile(id_profile):
+
+
     url = f"https://steamcommunity.com/profiles/{id_profile}"
+    
     driver.get(url)
     time.sleep(5)  # Chờ trang tải hoàn tất
+
+
     # Lấy tổng số lượng game từ phần thông tin
     try:
         div_total_games_text = driver.find_element(By.CLASS_NAME, 'profile_item_links')
@@ -109,6 +111,7 @@ def get_owned_games_count_by_id_profile(id_profile):
         print(f"Lỗi: {e}")
         return 0
      
+
 
 
 def Get_All_Game():
@@ -123,20 +126,23 @@ def Get_All_Game():
                 id, id_user, name_user, link_user, image_user, id_profile = user
                 if id_user != "":
                     increment_id = id
-                    
+                    # id_user = '76561198060921756'
                     check_total = get_owned_games_count_by_id_steam(id_user)
-                    if check_total > 30000 or check_total == 0:
+
+                    if check_total > 20000 or check_total == 0:
                         print("Member " + str(id)+ ": Name: " + str(name_user) +" and ID:  " + str(id_user)+  " ERROR!")
                         break 
                     else:
                         print("Member " + str(id)+ ": Name: " + str(name_user) +" and ID:  " + str(id_user) + " getting ...") 
                         increment_id = id
+                    
                         href_user = "https://www.lorenzostanco.com/lab/steam/u/" + str(id_user)
                         driver.get(href_user)
                         
                         # Chờ một chút để trang tải
-                        add_time = Decimal(0.04*int(check_total))
+                        add_time = Decimal(0.02*int(check_total))
                         time_load = int(add_time) + 5
+                       
                         time.sleep(time_load)
                         
                         get_div_game = driver.find_element(By.ID, "Games")
@@ -145,13 +151,12 @@ def Get_All_Game():
                             get_game = get_list_div_game.find_elements(By.TAG_NAME, "li")
                             count = len(get_game)
                             print("Have " + str(count) + " game in this account!")
-                            count_game = 1
                             for game in get_game:
                                 name_game = ""
                                 id_game = None
                                 list_tags = []
                                 image_game = ""
-                                time_play = 0
+                                time_play = None
                                 link_game = ""
 
 
@@ -191,39 +196,27 @@ def Get_All_Game():
                                 except NoSuchElementException:
                                     print("Element IMAGE not found.")
                                 
-
                                 str_tags = ', '.join(list_tags)
                                 id_insert_game = insert_Game(id_game, name_game, link_game, image_game, str_tags)
-
-                                result_insert_Relationship = check_insert_Relationship(id_user,id_game)
-                                if result_insert_Relationship == True:
-                                    id_insert_relationship = insert_Relationship(id_user,id_game)
-                                    insert_Relationship_Detail(id_insert_relationship, time_play, None)
-                                else:
-                                    id_insert_Relationship = result_insert_Relationship[0]
-                                    update_Relationship_Detail(id_insert_Relationship, time_play)
-                                result_check_insert_map = check_insert_map(id_user)
-                                if result_check_insert_map == True:
-                                    insert_table_map(id_user, count_game, increment_id)
-                                else:
-                                    id_check_insert_map = result_check_insert_map[0]
-                                    update_table_map(id_check_insert_map,count_game)
-
-                                count_game+=1
+                                id_insert_relationship = insert_Relationship(id_user,id_game)
+                                insert_Relationship_Detail(id_insert_relationship, time_play, None)
                 else:
                     increment_id = id
+                    # id_user = '76561198060921756'
                     check_total = get_owned_games_count_by_id_profile(id_profile)
+
                     if check_total > 20000 or check_total == 0:
                         print("Member " + str(id)+ ": Name: " + str(name_user) +" and ID:  " + str(id_user)+  " ERROR!")
                         break 
                     else:
                         print("Member " + str(id)+ ": Name: " + str(name_user) +" and ID:  " + str(id_user) + " getting ...") 
                         increment_id = id
+                    
                         href_user = "https://www.lorenzostanco.com/lab/steam/u/" + str(id_user)
                         driver.get(href_user)
                         
                         # Chờ một chút để trang tải
-                        add_time = Decimal(0.04*check_total)
+                        add_time = Decimal(0.02*check_total)
                         time_load = int(add_time) + 5
                         print(time_load)
                         time.sleep(time_load)
@@ -234,13 +227,12 @@ def Get_All_Game():
                             get_game = get_list_div_game.find_elements(By.TAG_NAME, "li")
                             count = len(get_game)
                             print("Have " + str(count) + " game in this account!")
-                            count_game = 1
                             for game in get_game:
                                 name_game = ""
                                 id_game = None
                                 list_tags = []
                                 image_game = ""
-                                time_play = 0
+                                time_play = None
                                 link_game = ""
 
 
@@ -282,35 +274,8 @@ def Get_All_Game():
                                 
                                 str_tags = ', '.join(list_tags)
                                 id_insert_game = insert_Game(id_game, name_game, link_game, image_game, str_tags)
-                                
-                                result_insert_Relationship = check_insert_Relationship(id_user,id_game)
-                                if result_insert_Relationship == True:
-                                    id_insert_relationship = insert_Relationship(id_user,id_game)
-                                    insert_Relationship_Detail(id_insert_relationship, time_play, None)
-                                else:
-                                    id_insert_Relationship = result_insert_Relationship[0]
-                                    update_Relationship_Detail(id_insert_Relationship, time_play)
-                                result_check_insert_map = check_insert_map(id_user)
-                                if result_check_insert_map == True:
-                                    insert_table_map(id_user, count_game, increment_id)
-                                else:
-                                    id_check_insert_map = result_check_insert_map[0]
-                                    update_table_map(id_check_insert_map,count_game)
-
-                                count_game+=1
-                                
-                                
-                                # if check_insert_Relationship == True:
-                                #     id_insert_relationship = insert_Relationship(id_user,id_game)
-                                #     insert_Relationship_Detail(id_insert_relationship, time_play, None)
-                                
-                                # if check_insert_map(id_user) == True:
-                                #     insert_table_map(id_user, count_game)
-                                # else:
-                                #     update_table_map(id_user,count_game)
-
-                                # count_game+=1
-
+                                id_insert_relationship = insert_Relationship(id_user,id_game)
+                                insert_Relationship_Detail(id_insert_relationship, time_play, None)
 
 
     finally:

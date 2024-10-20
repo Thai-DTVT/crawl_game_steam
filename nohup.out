@@ -1,0 +1,112 @@
+Keep-alive query executed, result: [(1,)]
+Member 1: Name: ᴹᴿ Ǥᴓᶑ-Ƙɪйɠヅ 🆚 and ID:  muscleking getting ...
+Have 9418 game in this account!
+Keep-alive query executed, result: [(1,)]
+Keep-alive query executed, result: [(1,)]
+Keep-alive query executed, result: [(1,)]
+Keep-alive query executed, result: [(1,)]
+Keep-alive query executed, result: [(1,)]
+Keep-alive query executed, result: [(1,)]
+Keep-alive query executed, result: [(1,)]
+Keep-alive query executed, result: [(1,)]
+Keep-alive query executed, result: [(1,)]
+Keep-alive query executed, result: [(1,)]
+Keep-alive query executed, result: [(1,)]
+Keep-alive query executed, result: [(1,)]
+Keep-alive query executed, result: [(1,)]
+Keep-alive query executed, result: [(1,)]
+Keep-alive query executed, result: [(1,)]
+Member 2: Name: ᴹᴿ ₤σиє Ꮤσℓƒ 🆚 and ID:  musclebrother getting ...
+Have 1200 game in this account!
+Keep-alive query executed, result: [(1,)]
+Keep-alive query executed, result: [(1,)]
+Member 3: Name: 🐱 Truong - OFFLINE and ID:  TruongPham getting ...
+Keep-alive query executed, result: [(1,)]
+Have 11332 game in this account!
+Keep-alive query executed, result: [(1,)]
+Keep-alive query executed, result: [(1,)]
+Keep-alive query executed, result: [(1,)]
+Keep-alive query executed, result: [(1,)]
+Keep-alive query executed, result: [(1,)]
+Keep-alive query executed, result: [(1,)]
+Keep-alive query executed, result: [(1,)]
+Keep-alive query executed, result: [(1,)]
+Keep-alive query executed, result: [(1,)]
+Keep-alive query executed, result: [(1,)]
+Keep-alive query executed, result: [(1,)]
+Keep-alive query executed, result: [(1,)]
+Keep-alive query executed, result: [(1,)]
+Keep-alive query executed, result: [(1,)]
+Keep-alive query executed, result: [(1,)]
+Keep-alive query executed, result: [(1,)]
+Keep-alive query executed, result: [(1,)]
+Keep-alive query executed, result: [(1,)]
+Member 4: Name: ®Ep U Xe Ka and ID:  epuxeka getting ...
+Have 447 game in this account!
+Keep-alive query executed, result: [(1,)]
+Member 5: Name: Đội trưởng đội phòng chống iPhon and ID:  vutunglam getting ...
+Have 119 game in this account!
+Member 6: Name: ∞ | Hachiko and ID:   getting ...
+5
+Have 0 game in this account!
+Member 7: Name: ♥ Owl City ♥ and ID:  415475 getting ...
+Have 571 game in this account!
+Keep-alive query executed, result: [(1,)]
+Member 8: Name: ♫ ⁧⁧Gucci and ID:  EmiDaPoet getting ...
+Have 673 game in this account!
+Keep-alive query executed, result: [(1,)]
+Keep-alive query executed, result: [(1,)]
+Member 9: Name: チェルシー {Yveltal} Vagabond and ID:  theblues9x getting ...
+Have 120 game in this account!
+Member 10: Name: 早上好 and ID:  194727 getting ...
+Have 47 game in this account!
+Member 11: Name: 開陽丸 KaiyouMaru and ID:  NagatoYukiVR getting ...
+Have 275 game in this account!
+Keep-alive query executed, result: [(1,)]
+Member 12: Name: Bé Xuân Mai Lồn To and ID:  laphisatthu getting ...
+Have 138 game in this account!
+Member 13: Name: Ｍ［▼］Ｐ and ID:  MVP21089 getting ...
+Have 69 game in this account!
+Member 14: Name: 󰀕Jokey󰀕 and ID:  arte02 getting ...
+Have 79 game in this account!
+Keep-alive query executed, result: [(1,)]
+Member 15: Name: (っ◔◡◔)っ ♥ oɐ̗ɓN and ID:  Webangok getting ...
+Have 4430 game in this account!
+Keep-alive query executed, result: [(1,)]
+Keep-alive query executed, result: [(1,)]
+Keep-alive query executed, result: [(1,)]
+Traceback (most recent call last):
+  File "/home/ubuntu/crawl_game_steam/login_steam.py", line 306, in <module>
+    Get_All_Game()
+  File "/home/ubuntu/crawl_game_steam/login_steam.py", line 163, in Get_All_Game
+    title_game = game.find_element(By.CLASS_NAME, "title")
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/selenium/webdriver/remote/webelement.py", line 417, in find_element
+    return self._execute(Command.FIND_CHILD_ELEMENT, {"using": by, "value": value})["value"]
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/selenium/webdriver/remote/webelement.py", line 395, in _execute
+    return self._parent.execute(command, params)
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/selenium/webdriver/remote/webdriver.py", line 354, in execute
+    self.error_handler.check_response(response)
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/selenium/webdriver/remote/errorhandler.py", line 229, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.NoSuchWindowException: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome-headless-shell=126.0.6478.126)
+Stacktrace:
+#0 0x55bf9e4ccc5a <unknown>
+#1 0x55bf9e1afe2c <unknown>
+#2 0x55bf9e1850d4 <unknown>
+#3 0x55bf9e227a8d <unknown>
+#4 0x55bf9e23dca6 <unknown>
+#5 0x55bf9e21f363 <unknown>
+#6 0x55bf9e1ef247 <unknown>
+#7 0x55bf9e1efb9e <unknown>
+#8 0x55bf9e49322b <unknown>
+#9 0x55bf9e4972d1 <unknown>
+#10 0x55bf9e47eade <unknown>
+#11 0x55bf9e497e32 <unknown>
+#12 0x55bf9e46377f <unknown>
+#13 0x55bf9e4bc618 <unknown>
+#14 0x55bf9e4bc7f0 <unknown>
+#15 0x55bf9e4cbd8c <unknown>
+#16 0x7fa7f1866ac3 <unknown>
+

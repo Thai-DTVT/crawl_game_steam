@@ -4,7 +4,7 @@ config = {
     'host': '103.172.237.75',
     'user': 'root',
     'password': 'MjfLy5lsW7Ph4iS869AejcK7',
-    'database': 'Game_steam'
+    'database': 'game_steam_infor'
 }
 
 
@@ -19,7 +19,7 @@ def keep_alive():
                 host = "103.172.237.75",
                 username = 'root',
                 password = "MjfLy5lsW7Ph4iS869AejcK7",
-                database="Game_steam"
+                database="game_steam_infor"
             )
             cursor = mydb1.cursor()
             cursor.execute("SELECT 1")
@@ -44,6 +44,13 @@ def execute_query(query, params=None):
         
 
         if query.strip().upper().startswith("INSERT"):
+            connection.commit()
+            inserted_id = cursor.lastrowid  # Lấy ID của bản ghi vừa thêm
+            cursor.close()
+            connection.close()
+            return inserted_id
+        
+        if query.strip().upper().startswith("UPDATE"):
             connection.commit()
             inserted_id = cursor.lastrowid  # Lấy ID của bản ghi vừa thêm
             cursor.close()
@@ -82,6 +89,13 @@ def check_insert_game(id_game):
         return results[0]
     else: return True
 
+def check_insert_map(id_user):
+    sql = "select * from table_map where id_user = '"+str(id_user)+"'"
+    results = execute_query(sql)
+    if results:
+        return results[0]
+    else: return True
+
 def insert_Game (id,name,link_game,image_game,tags_game):
     get_check = check_insert_game(id)
     if get_check == True:
@@ -91,6 +105,14 @@ def insert_Game (id,name,link_game,image_game,tags_game):
         return new_id
     else:
         return get_check
+
+
+def check_insert_Relationship(id_user,id_game):
+    sql = "select * from Relationship where id_user = '"+str(id_user)+"' and id_game = '"+str(id_game)+"'"
+    results = execute_query(sql)
+    if results:
+        return results[0]
+    else: return True
 
 def insert_Relationship (id_user,id_game):
     sql = "INSERT INTO Relationship (ID_User, ID_Game) VALUES (%s, %s)"
@@ -103,9 +125,36 @@ def insert_Relationship_Detail (id_relationship,timeplay, Other):
     val = (id_relationship, timeplay, Other)
     execute_query(sql, val)
 
+def update_Relationship_Detail (id,time):
+    sql = "UPDATE RelationshipDetail SET Time_Play = " +str(time) +" where id = "+str(id)
+    execute_query(sql)
+
+
+
+def insert_table_map (id_user,index_game, id_increment):
+    sql = "INSERT INTO table_map (type,id_user, index_game, id_increment) VALUES (%s, %s, %s, %s)"
+    val = ('game', id_user, index_game, id_increment)
+    execute_query(sql, val)
+
+
+def update_table_map (id,index_game):
+    sql = "UPDATE table_map SET index_game = " +str(index_game) +" where id = "+str(id)
+    execute_query(sql)
+
+
 def get_User(increment_id):
+    increment_id = increment_id
+    get_last_user = get_last_User()
+    if get_last_user:
+        increment_id = get_last_user[0][4]
+    # sql = "SELECT * FROM User where id = " + str(increment_id) +" limit 4"   #SQL test user
     sql = "SELECT * FROM User where id > " + str(increment_id) +" limit 4"
-    
+    results = execute_query(sql)
+    return results
+
+
+def get_last_User():
+    sql = "SELECT * FROM table_map ORDER BY id_increment DESC limit 4 " 
     results = execute_query(sql)
     return results
 
